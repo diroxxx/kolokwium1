@@ -15,15 +15,20 @@ public class BooksController:ControllerBase
     }
     
     [HttpGet]
-    [Route("api/books/{id}/authors")]
+    [Route("{id}/authors")]
     public async Task<IActionResult> getAutorsOfBook(int id)
     {
+        if (!await _booksRepository.DoesBookExist(id))
+        {
+            return BadRequest("books doesn't exist");
+        }
+        
         var authors = await _booksRepository.getAutorsOfBook(id);
         return Ok(authors);
     }
 
     [HttpPost]
-    [Route("api/books")]
+    [Route("books")]
     public async Task<IActionResult> addBookWithAuthors(AddBook addBook)
     {
         var idBook = await _booksRepository.addBook(addBook.title);

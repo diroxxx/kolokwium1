@@ -70,7 +70,21 @@ public class BookRepository:IBooksRepository
         return autorsOfBook;
     }
 
-   
+    public async Task<bool> DoesBookExist(int id)
+    {
+        await using SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("Default"));
+        await using SqlCommand command = new SqlCommand();
+        command.Connection = connection;
+        await connection.OpenAsync();
+        command.CommandText = "select 1 from books where books.PK = @id";
+
+        
+        command.Parameters.AddWithValue("@id", id);
+
+       var res=  await command.ExecuteScalarAsync();
+       return res is not null;
+    }
+
 
     public async Task<int> addAuthor(Author author)
     {
@@ -98,11 +112,11 @@ public class BookRepository:IBooksRepository
         await using SqlCommand command = new SqlCommand();
         command.Connection = connection;
         await connection.OpenAsync();
-        command.CommandText = "insert into books_authors values(@idBook, @@idAuthors)";
+        command.CommandText = "insert into books_authors values(@idBook, @idAuthors)";
 
         
         command.Parameters.AddWithValue("@idBook", idBook);
-        command.Parameters.AddWithValue("@idAuthors", idBook);
+        command.Parameters.AddWithValue("@idAuthors", idAuthor);
 
         await command.ExecuteNonQueryAsync();
 
