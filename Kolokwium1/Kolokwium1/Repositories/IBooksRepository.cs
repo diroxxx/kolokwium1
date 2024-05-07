@@ -7,6 +7,6 @@ public interface IBooksRepository
     Task<AuthorsOfBookDTO> getAutorsOfBook(int id);
     Task<int> addBook(String title);
     Task<int> addAuthor(Author author);
-    
-    Task<>
+
+    Task addBookAndAuthor(int idBook, int idAuthor);
 }

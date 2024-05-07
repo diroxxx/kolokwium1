@@ -91,6 +91,23 @@ public class BookRepository:IBooksRepository
         
     }
 
+    public async Task addBookAndAuthor(int idBook, int idAuthor)
+    {
+        
+        await using SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("Default"));
+        await using SqlCommand command = new SqlCommand();
+        command.Connection = connection;
+        await connection.OpenAsync();
+        command.CommandText = "insert into books_authors values(@idBook, @@idAuthors)";
+
+        
+        command.Parameters.AddWithValue("@idBook", idBook);
+        command.Parameters.AddWithValue("@idAuthors", idBook);
+
+        await command.ExecuteNonQueryAsync();
+
+    }
+
     public async Task<int> addBook(String title)
     {
         await using SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("Default"));

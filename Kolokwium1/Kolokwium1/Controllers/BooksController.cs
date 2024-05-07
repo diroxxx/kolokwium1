@@ -37,12 +37,12 @@ public class BooksController:ControllerBase
         {
             
             var idAuthor = await _booksRepository.addAuthor(author);
-            
-            
+
+          await _booksRepository.addBookAndAuthor(idBook, idAuthor);
         }
 
 
-        return Created(Request.Path.Value ?? "api/animals", authorsOfBookDto);
+        return Created(Request.Path.Value ?? $"api/{idBook}/authors", authorsOfBookDto);
     }
     
 
